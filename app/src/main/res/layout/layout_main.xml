@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <com.example.turntabledemo.TurnProgressView
+            android:id="@+id/tp_progress"
+            android:layout_width="335dp"
+            android:layout_height="335dp"
+            app:layout_constraintTop_toTopOf="@+id/iv_turn_table"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_turn_table"
+            app:layout_constraintEnd_toEndOf="@+id/iv_turn_table"
+            app:layout_constraintStart_toStartOf="@+id/iv_turn_table"
+            />
+
+        <com.example.turntabledemo.turntable.TurntableView
+
+            android:id="@+id/lrv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:name_size="11sp"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toTopOf="@+id/iv_turn_table"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_turn_table"
+            app:layout_constraintEnd_toEndOf="@+id/iv_turn_table"
+            app:layout_constraintStart_toStartOf="@+id/iv_turn_table"
+            />
+        <ImageView
+            android:id="@+id/iv_turn_table"
+            android:layout_width="299dp"
+            android:layout_height="299dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@mipmap/bg_turn_table"
+            />
+        <ImageView
+            android:id="@+id/iv_start"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@mipmap/ic_turn_table_start"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/add_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ 1"/>
+        <Button
+            android:id="@+id/add_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ 10"/>
+        <Button
+            android:id="@+id/add_30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ 30"/>
+
+    </LinearLayout>
+
+</LinearLayout>

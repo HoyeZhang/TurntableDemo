@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TurntableView">
+        <!--        名字的颜色-->
+        <attr name="name_color" format="color"></attr>
+        <!--        名字的大小-->
+        <attr name="name_size" format="dimension"></attr>
+        <!--        头像后面框的背景样色-->
+        <attr name="avatar_background" format="color"></attr>
+        <!--        头像的后面框的背景大小-->
+        <attr name="avatar_border_size" format="dimension"></attr>
+    </declare-styleable>
+
+</resources>
