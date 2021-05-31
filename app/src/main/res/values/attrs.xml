@@ -3,13 +3,21 @@
 
     <declare-styleable name="TurntableView">
         <!--        名字的颜色-->
-        <attr name="name_color" format="color"></attr>
+        <attr name="gift_name_color" format="color"></attr>
         <!--        名字的大小-->
-        <attr name="name_size" format="dimension"></attr>
+        <attr name="gift_name_size" format="dimension"></attr>
         <!--        头像后面框的背景样色-->
         <attr name="avatar_background" format="color"></attr>
         <!--        头像的后面框的背景大小-->
         <attr name="avatar_border_size" format="dimension"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="TurnProgressView">
+        <!--        进度颜色-->
+        <attr name="progress_color" format="color"></attr>
+        <!--        进度大小-->
+        <attr name="progress_size" format="dimension"></attr>
+
     </declare-styleable>
 
 </resources>

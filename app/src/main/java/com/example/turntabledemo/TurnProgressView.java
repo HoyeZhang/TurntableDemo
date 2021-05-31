@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -30,24 +31,31 @@ public class TurnProgressView extends View {
 
     private Paint paintDefault;
     private Paint paintCurrent;
+    private Paint textPaint;
     private int[] colors = {Color.parseColor("#FFFC27"), Color.parseColor("#FF9686")};
+    private float mTextSize;//字体大小
+    private int mTextColor = Color.BLACK;
 
     float mPoint = 0.f;
     private float borderWidth = 18;
     private ObjectAnimator objectAnimator;
 
     public TurnProgressView(Context context) {
-        super(context);
+        this(context,null);
         initView();
     }
 
     public TurnProgressView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,0);
         initView();
     }
 
     public TurnProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TurnProgressView);
+        mTextColor = ta.getColor(R.styleable.TurnProgressView_progress_color, Color.BLACK);
+        mTextSize = ta.getDimension(R.styleable.TurnProgressView_progress_size, 30f);
+        ta.recycle();
         initView();
     }
 
@@ -67,7 +75,12 @@ public class TurnProgressView extends View {
         //设置笔刷的样式 Paint.Cap.Round ,Cap.SQUARE等分别为圆形、方形
         paintCurrent.setStrokeCap(Paint.Cap.ROUND);
 
-
+        textPaint = new Paint();
+        textPaint.setStyle(Paint.Style.FILL);//设置填充样式
+        textPaint.setAntiAlias(true);//抗锯齿功能
+        textPaint.setTextSize(mTextSize);
+        textPaint.setColor(mTextColor);
+        textPaint.setStrokeWidth(borderWidth);//设置画笔宽度
     }
 
     @Override
@@ -113,6 +126,13 @@ public class TurnProgressView extends View {
         // 画布恢复正常
         canvas.translate(getWidth(), 0);
         canvas.scale(-1, 1);
+
+        float radian = (float) Math.toRadians(305);
+        float x = (float) (centerX + Math.cos(radian)*centerX);
+        float y = (float) (centerX + Math.sin(radian)*centerX);
+
+        canvas.drawText((int)(mPoint * 100)+ "", x - 40f , y- 20f, textPaint);
+
     }
 
 

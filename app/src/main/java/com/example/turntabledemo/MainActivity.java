@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
-import com.example.turntabledemo.turntable.GiftBean;
+import com.example.turntabledemo.turntable.TurntableGiftBean;
 import com.example.turntabledemo.turntable.TurntableView;
 
 import java.util.ArrayList;
@@ -31,16 +31,16 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_main);
         turntableView = findViewById(R.id.lrv);
-        ArrayList<GiftBean> giftBeans = new ArrayList<>();
+        ArrayList<TurntableGiftBean> turntableGiftBeans = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            GiftBean giftBean = new GiftBean();
-            giftBean.setGiftName("i= " + i);
-            giftBean.setId(100 + i);
-            giftBean.setGiftImageUrl("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fdfa9b51a0129d297bbcd9265aa278cada15c4c1e8d135-KNUWOY_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624691592&t=b8b442f412b80e2cdc834ba51fb3a499");
-            giftBeans.add(giftBean);
+            TurntableGiftBean turntableGiftBean = new TurntableGiftBean();
+            turntableGiftBean.setGiftName("i= " + i);
+            turntableGiftBean.setId(100 + i);
+            turntableGiftBean.setGiftImageUrl("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fdfa9b51a0129d297bbcd9265aa278cada15c4c1e8d135-KNUWOY_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624691592&t=b8b442f412b80e2cdc834ba51fb3a499");
+            turntableGiftBeans.add(turntableGiftBean);
         }
 
-        turntableView.setData(giftBeans);
+        turntableView.setData(turntableGiftBeans);
         turntableView.setLuckyPosition(102);
 
         ImageView ivStart = findViewById(R.id.iv_start);

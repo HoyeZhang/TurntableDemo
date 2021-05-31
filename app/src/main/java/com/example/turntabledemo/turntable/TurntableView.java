@@ -11,8 +11,10 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -69,10 +71,9 @@ public class TurntableView extends View {
     private int mMySelfBorderColor = Color.WHITE;//头像背景的圈自己的颜色
     private int mBorderWidth = 0;//头像背景超过头像的值
     private List<RadialGradient> radialGradients = new ArrayList<>();
-
-    public GiftBean mLuckyPerson;
+    public TurntableGiftBean mLuckyPerson;
     private ObjectAnimator objectAnimator;
-    private ArrayList<GiftBean> giftBeans = new ArrayList<>();
+    private ArrayList<TurntableGiftBean> turntableGiftBeans = new ArrayList<>();
     private int[] colors = {
             Color.WHITE,
             Color.BLUE,
@@ -117,8 +118,8 @@ public class TurntableView extends View {
         mContext = context;
         TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.TurntableView);
         mBorderColor = ta.getColor(R.styleable.TurntableView_avatar_background, Color.BLACK);
-        mTextColor = ta.getColor(R.styleable.TurntableView_name_color, Color.BLACK);
-        mTextSize = ta.getDimension(R.styleable.TurntableView_name_size, 20f);
+        mTextColor = ta.getColor(R.styleable.TurntableView_gift_name_color, Color.BLACK);
+        mTextSize = ta.getDimension(R.styleable.TurntableView_gift_name_size, 20f);
         mBorderWidth = (int) ta.getDimension(R.styleable.TurntableView_avatar_border_size, 0f);
         ta.recycle();
         init();
@@ -135,13 +136,13 @@ public class TurntableView extends View {
         mOnAnimalEndListener = onAnimalEndListener;
     }
 
-    public final void setData(ArrayList<GiftBean> participantUsersBeanList) {
+    public final void setData(ArrayList<TurntableGiftBean> participantUsersBeanList) {
         mSum = participantUsersBeanList.size();
         mItemAngle = 360.0F / mSum;//计算每个item的角度
         mStartAngle = -mItemAngle / 2;
-        giftBeans.clear();
+        turntableGiftBeans.clear();
         for (int i = 0; i < mSum; i++) {
-            GiftBean luckyPersonBean = new GiftBean();
+            TurntableGiftBean luckyPersonBean = new TurntableGiftBean();
             luckyPersonBean.setmCenterAngle(mStartAngle + mItemAngle * (float) i + mItemAngle / (float) 2);
             luckyPersonBean.setId(participantUsersBeanList.get(i).getId());
             luckyPersonBean.setGiftName(participantUsersBeanList.get(i).getGiftName());
@@ -156,15 +157,15 @@ public class TurntableView extends View {
                 }
             });
 
-            giftBeans.add(luckyPersonBean);
+            turntableGiftBeans.add(luckyPersonBean);
         }
 
     }
 
     public void setLuckyPosition(int giftId) {
-        for (int i = 0; i < giftBeans.size(); i++) {
-            if (giftId == giftBeans.get(i).getId()) {
-                mLuckyPerson = giftBeans.get(i);
+        for (int i = 0; i < turntableGiftBeans.size(); i++) {
+            if (giftId == turntableGiftBeans.get(i).getId()) {
+                mLuckyPerson = turntableGiftBeans.get(i);
                 mHandler.sendEmptyMessage(1);
                 break;
             }
@@ -181,7 +182,7 @@ public class TurntableView extends View {
         mPreStartIndex = 0;//已经准备好的bitmap
         mStartAngle = 0.0F;//存储圆盘开始的位置
         mItemAngle = 0.0F;//每个item的角度
-        giftBeans.clear();
+        turntableGiftBeans.clear();
         mLuckyPerson = null;
     }
 
@@ -198,15 +199,15 @@ public class TurntableView extends View {
      * 计算一下头像所在的位置
      */
     private final void calculateAvatarRetF() {
-        mBorderRect.set((float) mRadio - (float) mAvatarRadio, (float) mRadio / (float) 3 - (float) mAvatarRadio, (float) mRadio + (float) mAvatarRadio, (float) mRadio / (float) 3 + (float) mAvatarRadio);
-        mDrawableRect.set((float) mRadio - (float) mAvatarRadio, (float) mRadio / (float) 3 - (float) mAvatarRadio, (float) mRadio + (float) mAvatarRadio, (float) mRadio / (float) 3 + (float) mAvatarRadio);
+        mBorderRect.set((float) mRadio - (float) mAvatarRadio, (float) mRadio / (float) 4 - (float) mAvatarRadio, (float) mRadio + (float) mAvatarRadio, (float) mRadio / (float) 4 + (float) mAvatarRadio);
+        mDrawableRect.set((float) mRadio - (float) mAvatarRadio, (float) mRadio / (float) 4 - (float) mAvatarRadio, (float) mRadio + (float) mAvatarRadio, (float) mRadio / (float) 4 + (float) mAvatarRadio);
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
         mWith = MeasureSpec.getSize(widthMeasureSpec);
-        mHeight = MeasureSpec.getSize(heightMeasureSpec);
-        mRadio = Math.min(mWith, mHeight) / 2;//设置半径
+        //mHeight = MeasureSpec.getSize(heightMeasureSpec);
+        mRadio =  mWith / 2;//设置半径
         createRadialGradientList();
         //确定一下圆心的坐标
         mBackRoundRect.top = 0.0F;
@@ -233,6 +234,8 @@ public class TurntableView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (isPend) {
+            //画表盘
+
             // 先旋转 后作画图 （作画后再旋转就没用了）
             canvas.rotate(-90.0F, (float) mRadio, (float) mRadio);
             for (int index = 0; index < mSum; index++) {
@@ -268,9 +271,9 @@ public class TurntableView extends View {
         //save()跟restore()要成对存在 -- 表示在save到restore中的旋转放大缩小等 只对这两方法间的绘画起作用
         canvas.save();
         canvas.rotate(90.0F, (float) mRadio, (float) mRadio);//将原来的画布-90旋转回来90回来
-        canvas.rotate(giftBeans.get(index).getmCenterAngle(), (float) mRadio, (float) mRadio);
+        canvas.rotate(turntableGiftBeans.get(index).getmCenterAngle(), (float) mRadio, (float) mRadio);
         // 再进行item中心角度的旋转，并画头像
-        canvas.drawText(giftBeans.get(index).getGiftName(), mTextX, mTextY, mTextPaint);
+        canvas.drawText(turntableGiftBeans.get(index).getGiftName(), mTextX, mTextY, mTextPaint);
         canvas.restore();
     }
 
@@ -278,20 +281,20 @@ public class TurntableView extends View {
      * 画头像
      */
     private void drawCircleAvatar(Canvas canvas, int i) {
-        mBitmapShader = new BitmapShader(giftBeans.get(i).getGiftImageBitmap(), Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        mBitmapShader = new BitmapShader(turntableGiftBeans.get(i).getGiftImageBitmap(), Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         mBitmapPaint.setAntiAlias(true);
         mBitmapPaint.setShader(mBitmapShader);
         mBorderPaint.setStyle(Paint.Style.FILL);
         mBorderPaint.setAntiAlias(true);
         mBorderPaint.setColor(mBorderColor);
 
-        updateShaderMatrix(giftBeans.get(i).getGiftImageBitmap());//对图片进行缩小跟移动中心点
+        updateShaderMatrix(turntableGiftBeans.get(i).getGiftImageBitmap());//对图片进行缩小跟移动中心点
         canvas.save();
         canvas.rotate(90.0F, (float) mRadio, (float) mRadio);
-        canvas.rotate(giftBeans.get(i).getmCenterAngle(), (float) mRadio, (float) mRadio);
+        canvas.rotate(turntableGiftBeans.get(i).getmCenterAngle(), (float) mRadio, (float) mRadio);
 //        canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), (float) mAvatarRadio + (float) mBorderWidth, mBorderPaint);
 //        canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), (float) mAvatarRadio, mBitmapPaint);
-        canvas.drawBitmap(giftBeans.get(i).getGiftImageBitmap(), mShaderMatrix, mBitmapPaint);
+        canvas.drawBitmap(turntableGiftBeans.get(i).getGiftImageBitmap(), mShaderMatrix, mBitmapPaint);
         canvas.restore();
     }
 
@@ -312,9 +315,9 @@ public class TurntableView extends View {
      * 开始动画
      */
     public final void startAnimal() {
-//        if (objectAnimator != null) {
-//            objectAnimator.cancel();
-//        }
+        if (objectAnimator != null) {
+            objectAnimator.cancel();
+        }
 
         float endAngle = mRepeatCount * 360 + (360 - mLuckyPerson.getmCenterAngle());
         objectAnimator = ObjectAnimator.ofFloat(this, "rotation", 0, endAngle / 2, endAngle - 4, endAngle + 2, endAngle);

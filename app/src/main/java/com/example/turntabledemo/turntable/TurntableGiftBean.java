@@ -20,7 +20,7 @@ import com.example.turntabledemo.R;
  * @Author: zhy
  * @CreateDate: 2021/5/26 18:02
  */
-public class GiftBean {
+public class TurntableGiftBean {
     private long id;
     private String giftName;
     private String giftImageUrl;
